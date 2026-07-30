@@ -203,3 +203,42 @@ projectCarousels.forEach((carousel) => {
 
   updateCarousel();
 });
+
+document.addEventListener("click", (event) => {
+  const clickedLink = event.target.closest("a");
+
+  if (!clickedLink || typeof window.gtag !== "function") {
+    return;
+  }
+
+  const linkAddress = clickedLink.href;
+  const linkText = clickedLink.textContent.trim().replace(/\s+/g, " ");
+
+  if (linkAddress.includes("wa.me")) {
+    window.gtag("event", "whatsapp_click", {
+      link_text: linkText,
+      link_url: linkAddress,
+      page_location: window.location.href,
+    });
+
+    return;
+  }
+
+  if (linkAddress.startsWith("mailto:")) {
+    window.gtag("event", "email_click", {
+      link_text: linkText,
+      link_url: linkAddress,
+      page_location: window.location.href,
+    });
+
+    return;
+  }
+
+  if (linkAddress.includes("linkedin.com")) {
+    window.gtag("event", "linkedin_click", {
+      link_text: linkText,
+      link_url: linkAddress,
+      page_location: window.location.href,
+    });
+  }
+});
